@@ -1,0 +1,99 @@
+### Bank accounts 
+print ("Welcome to Kiwi Bank!\n\nWhat can I do for you?")
+
+### Ask user required service
+service = int(input("""Please enter a number from 1,2 or 3? 
+1) Open a new account
+2) Close your account
+3) Manage your deposite\n"""))
+
+name = input("Please enter your first name: ")
+family = input("Please enter your last name: ")
+user = name.title() + "_" + family.title()
+
+### Make a new account
+if service == 1:
+    initial_deposit = int(input("The minimum deposit is 100 dollors\nHow much do you want to save?\n"))
+    with open (user,"w") as file_object:
+                          
+                          file_object.write("Client: " + user)
+                          file_object.write("\n")
+                          file_object.write("Deposit:\n" + str(initial_deposit))
+                          file_object.write("\n")
+    print("Dear ",name.title(),"you now have an account in:\n<<<Kiwi Bank>>>\n")
+
+    with open (user) as file_object:
+        account_info = file_object.read()
+        print(account_info)
+
+### Close an existing account
+elif service == 2:
+    import os
+    os.remove(user)
+    print("The following account was terminated:\n",user)
+    print("Dear ",name.title()," we hope to see you again!")
+
+### Manage an account 
+elif service == 3:
+    print("Hi ",name.title()," what can I do for you? ")
+    balance = int(input("""
+1) Print your account information.
+2) Increase your deposit.
+3) Withdraw your deposit.\n"""))
+    
+    ### print account info
+    if balance == 1:
+        with open(user) as file_object:
+            lines = file_object.readlines()
+            print("\n")
+            for row in lines:
+                print(row)
+            
+    ### add or withdraw money
+    elif balance == 2 or 3:
+        with open(user,"r+") as file_object:
+            lines = file_object.readlines()
+            last_line = lines[len(lines)-1]
+            Last_transaction = last_line.split(" ")
+            current_deposit = Last_transaction[len(Last_transaction)-1]
+            current_deposit = int(current_deposit)
+
+            ### add to account
+            if balance == 2:
+                add = int(input("How much do you want to increase your deposit: "))
+                new_deposit = add + current_deposit
+                file_object.write("\n......\n")
+                file_object.write(str(new_deposit))
+                print("Dear ",user," ",add," dollors was added to your deposit.")
+
+            ### withdraw from account
+            elif balance == 3:
+                while True:
+                    withdraw = int(input("How much money do you need? "))
+                    if withdraw >= current_deposit:
+                        print("You do not have that much money!")
+                        print("You could ask less than ", current_deposit - 10," dollors.")
+                        continue
+                    else:
+                        new_deposit = current_deposit - withdraw
+                        file_object.write("\n......\n")
+                        file_object.write(str(new_deposit))
+                        print("Dear ",user," ",withdraw," dollors was withdrawed from your deposit.")
+                        break
+                    
+    ### print the new deposit           
+        with open(user) as file_object:
+            update = file_object.readlines()
+            print("Your current deposit is: ",update[len(update)-1])
+            
+            
+            
+            
+            
+            
+            
+                      
+            
+    
+                          
+                          
