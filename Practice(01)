@@ -2,11 +2,19 @@
 print ("Welcome to Kiwi Bank!\n\nWhat can I do for you?")
 
 ### Ask user required service
-service = int(input("""Please enter a number from 1,2 or 3? 
+while True:
+    try:
+        service = int(input("""Please enter a number from 1,2 or 3? 
 1) Open a new account
 2) Close your account
 3) Manage your deposite\n"""))
-
+        if service in [1,2,3]:
+            break
+        else:
+            service = service/0
+    except:
+        print("\n\n**** Please enter a correct digit!****\n")
+        
 name = input("Please enter your first name: ")
 family = input("Please enter your last name: ")
 user = name.title() + "_" + family.title()
