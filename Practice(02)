@@ -1,0 +1,123 @@
+### Bank accounts 
+print ("Welcome to Kiwi Bank!\n")
+
+### Make a new account
+def Make_newAccount(user):
+    initial_deposit = int(input("The minimum deposit is 100 dollors\nHow much do you want to save?\n"))
+    with open (user,"w") as file_object:
+        file_object.write("Client: " + user)
+        file_object.write("\n")
+        file_object.write("Deposit:\n" + str(initial_deposit))
+        file_object.write("\n")
+        
+    print("Dear ",name.title(),"you now have an account in:\n<<<Kiwi Bank>>>\n")
+
+    with open (user) as file_object:
+        account_info = file_object.read()
+        print(account_info)
+       
+### Close an existing account
+def Close_Account(user):
+    import os
+    os.remove(user)
+    print("The following account was terminated:\n",user)
+    print("Dear ",name.title()," we hope to see you again!")
+
+### print account info
+def Print_Account_info(user):
+    with open(user) as file_object:
+        lines = file_object.readlines()
+        print("\n")
+        for row in lines:
+            print(row)
+            
+### add or withdraw money
+def Account_Balance(user):
+    with open(user) as file_object:
+        lines = file_object.readlines()
+        last_line = lines[len(lines)-1]
+        Last_transaction = last_line.split(" ")
+        current_deposit = Last_transaction[len(Last_transaction)-1]
+        current_deposit = int(current_deposit)
+    return current_deposit
+
+### add to account
+def Add_To_Account(user):
+    current_deposit = Account_Balance(user)
+    add = int(input("How much do you want to increase your deposit: "))
+    new_deposit = add + int(current_deposit)
+    with open(user,'a') as file_object:
+        file_object.write("\n......\n")
+        file_object.write(str(new_deposit))
+        print("Dear ",user," ",add," dollors was added to your deposit.")
+
+### withdraw from account
+def Withdraw(user):
+    current_deposit = Account_Balance(user)
+    while True:
+        withdraw = int(input("How much money do you want? "))
+        if withdraw >= current_deposit:
+            print("You do not have that much money!")
+            print("You could ask less than ", current_deposit - 10," dollors.")
+            continue
+        else:
+            new_deposit = current_deposit - withdraw
+            with open(user,'a') as file_object:
+                file_object.write("\n......\n")
+                file_object.write(str(new_deposit))
+                print("Dear ",user," ",withdraw," dollors was withdrawed from your deposit.")
+                break
+
+### Manage an account 
+def Manage_Account(user):
+    while True:
+        try:
+            print("Hi ",name.title()," what can I do for you? ")
+            order = int(input("""
+1) Print your account information.
+2) Increase your deposit.
+3) Withdraw your deposit.\n"""))
+            if order in [1,2,3]:
+                if order == 1:
+                    Print_Account_info(user)
+                elif order == 2:
+                    Add_To_Account(user)
+                else:
+                    Withdraw(user)
+                break
+            else:
+                order = 5/0
+        except:
+            print("\n***Enter a valid digit!***\n")
+                   
+### Ask user required service
+while True:
+    try:
+        service = input("""\n
+************************************
+Please enter a number from 1,2 or 3? 
+1) Open a new account
+2) Close your account
+3) Manage your deposite
+To quit please enter "Q"...\n:\n""")
+        if service == "Q":
+            break
+        else:
+            service = int(service)
+            if service in [1,2,3]:
+                name = input("Please enter your first name: ")
+                family = input("Please enter your last name: ")
+                user = name.title() + "_" + family.title()
+                if service == 1:
+                    Make_newAccount(user)
+                elif service == 2:
+                    Close_Account(user)
+                else:
+                    Manage_Account(user)
+            else:
+                5/0
+    except:
+        print("\n\n***** Please enter a valid digit!****\n")
+
+
+print("Have a Good Day!")        
