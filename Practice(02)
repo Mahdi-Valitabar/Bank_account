@@ -9,6 +9,10 @@ def Make_newAccount(user):
         file_object.write("\n")
         file_object.write("Deposit:\n" + str(initial_deposit))
         file_object.write("\n")
+
+    with open ("Accounts_list","a") as file_object:
+        file_object.write(user)
+        file_object.write("\n")      
         
     print("Dear ",name.title(),"you now have an account in:\n<<<Kiwi Bank>>>\n")
 
@@ -30,7 +34,7 @@ def Print_Account_info(user):
         print("\n")
         for row in lines:
             print(row)
-            
+       
 ### add or withdraw money
 def Account_Balance(user):
     with open(user) as file_object:
@@ -89,7 +93,64 @@ def Manage_Account(user):
                 order = 5/0
         except:
             print("\n***Enter a valid digit!***\n")
-                   
+
+### Get the list of clients from the system
+def Bank_Info():
+    Accounts = []
+    with open ("Accounts_list") as file_object:
+        lines = file_object.readlines()
+        for line in lines:
+            Accounts.append(line)
+    return Accounts
+
+### Print only the name of clients
+def Clients_names():
+    List = Bank_Info()
+    for user in List:
+        print(user.strip())
+
+### Make a dictionery including the name and deposit of all clients
+def Clients_deposit():
+    Clients_Dictionery = {}
+    List = Bank_Info()
+    for user in List:
+        user = user.strip()
+        Deposit = Account_Balance(user)
+        Clients_Dictionery.update({user:Deposit})
+    print(Clients_Dictionery)
+    return Clients_Dictionery
+        
+### Print the whole list of clients and their deposit
+def Bank_Clients_info():
+    Dic = Clients_deposit()
+    for key, value in Dic.items():
+        print(i + " : " + j)
+           
+### System managements for bank officers
+def system(user):
+    print("\n****This is system access.****\n")
+    System_file = "system_access_info"
+    with open(System_file,'a') as file_object:
+        file_object.write(user)
+        file_object.write("\n")
+
+    print("Hello " + user + "!")
+       
+    while True:
+        orders = int(input("""\nWhat do you want to do?\n
+1 = print the whole bank deposit
+2 = print the name of bank clients
+3 = print the name and money of all clients
+\n"""))
+        if orders == 1:
+            Bank_save()
+        elif orders == 2:
+            Clients_names()
+        elif orders == 3:
+            Bank_Clients_info()
+        else:
+            print("Please enter a valid digit between 1 to 3")
+            
 ### Ask user required service
 while True:
     try:
@@ -99,12 +160,13 @@ Please enter a number from 1,2 or 3?
 1) Open a new account
 2) Close your account
 3) Manage your deposite
-To quit please enter "Q"...\n:\n""")
+*If you have system access, please enter your code:
+Otherwise to quit please enter "Q"...\n:\n""")
         if service == "Q":
             break
         else:
             service = int(service)
-            if service in [1,2,3]:
+            if service in [1,2,3,2321]:
                 name = input("Please enter your first name: ")
                 family = input("Please enter your last name: ")
                 user = name.title() + "_" + family.title()
@@ -112,8 +174,12 @@ To quit please enter "Q"...\n:\n""")
                     Make_newAccount(user)
                 elif service == 2:
                     Close_Account(user)
-                else:
+                elif service == 3:
                     Manage_Account(user)
+
+                ### Bank officer could manage the whole bank accounts
+                else:
+                    system(user)
             else:
                 5/0
     except:
